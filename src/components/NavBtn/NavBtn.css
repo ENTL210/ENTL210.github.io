@@ -1,0 +1,25 @@
+.btn {
+    font-size: calc(20px);
+    font-weight: 800;
+    background:none;
+    border:none;
+    margin:0;
+    padding:0;
+    cursor: pointer;
+    color: black;
+}
+
+.btn:hover {
+    text-decoration: underline;
+}
+
+.btn-active {
+    font-size: calc(20px);
+    font-weight: 800;
+    background:none;
+    border:none;
+    margin:0;
+    padding:0;
+    cursor: pointer;
+    color: rgb(255, 186, 143);
+}

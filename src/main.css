@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;500;600;700;800&display=swap');
+
+* {
+    font-family: 'Assistant', sans-serif;
+    --primary-color: rgb(191, 228, 240);
+    --secondary-color: rgb(200, 235, 246);
+}
+
+body {
+    margin: 0;
+    background-color: var(--primary-color)
+}
+
+.container {
+    display: grid;
+    grid-template-columns: [column-start] 1fr repeat(10, 1fr) [column-end] 1fr;
+    grid-template-rows: max-content;
+    column-gap: 2fr;
+    align-self: center;
+    padding: 20px;
+}
+
+.nav {
+    background-color: var(--secondary-color);
+    border-radius: 20px;
+    grid-column: 2 / 12;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 10px
+}
+
+.nav > a {
+    font-size: calc(20px);
+    font-weight:800;
+    color: black;
+    transition: 0.5s;
+    text-decoration: none;
+}
+
+.nav > p:hover {
+    text-decoration: underline;
+}
