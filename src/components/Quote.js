@@ -2,6 +2,6 @@ import React from "react"
 
 export default function Quote() {
     return (
-        <div></div>
+        <p className="quote">"Genius is 1% talent and 99% percent hard work...” - Albert Einstein</p>
     )
 }
