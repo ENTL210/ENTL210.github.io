@@ -7,7 +7,7 @@ export default function Introduction() {
                 <h1 className="fullname">Edward Trung Nguyen Lam</h1>
                 <p className="position">Introvert, intuitive, thinking, and judging person</p>
             </div>
-            <img src="./profilePicture.png" className="profile-picture"/>
+            <img src="./profilePicture.png" alt="" className="profile-picture"/>
         </div>
     )
 }

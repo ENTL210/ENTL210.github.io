@@ -13,9 +13,8 @@ export default function App() {
         <div className="container">
             <Router>
                 <NavBar setIndex={index => setIndex(index)} />
-
                 <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={<Home index={index}/>} />
                     <Route path="/blogs" element={<Blogs />} />
                 </Routes>
             </Router>

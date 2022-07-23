@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;500;600;700;800&display=swap');
+
+* {
+    font-family: 'Assistant', sans-serif;
+    --primary-color: #2b7375;     
+    --secondary-color: #428285;
+}
+
+.messeage-inactive {
+    display: none;
+}
+
+.messeage-active {
+    grid-column: 1 / span 12;
+    display: flex;
+    background-color: var(--secondary-color);
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 0;
+    align-items: center;
+}
+
+.messeage-active > img {
+    width: calc(25px + 1vw);
+    padding: 5px;
+}
+
+.messeage-active > p {
+    font-size: calc(10px + 1vw);
+    font-weight: 800;
+}
