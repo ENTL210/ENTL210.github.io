@@ -1,0 +1,59 @@
+name: Deploy frontend to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build
+        working-directory: frontend
+        shell: bash
+        run: |
+          # Optional repo Secrets override frontend/.env.production when set
+          [ -n "${{ secrets.VITE_API_URL }}" ] && export VITE_API_URL="${{ secrets.VITE_API_URL }}"
+          [ -n "${{ secrets.VITE_APP_SECRET }}" ] && export VITE_APP_SECRET="${{ secrets.VITE_APP_SECRET }}"
+          [ -n "${{ secrets.VITE_HIDDEN_ROUTE }}" ] && export VITE_HIDDEN_ROUTE="${{ secrets.VITE_HIDDEN_ROUTE }}"
+          npm run build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

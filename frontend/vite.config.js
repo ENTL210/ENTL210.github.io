@@ -5,11 +5,13 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const apiTarget =
     env.VITE_API_PROXY || env.VITE_API_URL || "http://127.0.0.1:5001";
+  // GitHub project pages: https://<user>.github.io/<repo>/
+  const base = env.VITE_BASE_PATH || "/";
 
   return {
+    base,
     plugins: [react()],
     server: {
-      // Listen on LAN so phones can open http://<mac-ip>:5173
       host: true,
       port: 5173,
       strictPort: true,
