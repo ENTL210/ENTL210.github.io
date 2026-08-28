@@ -1,0 +1,90 @@
+.bottom-sheet-root {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.bottom-sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.bottom-sheet {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 720px;
+  height: 90vh;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border-bottom: none;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.bottom-sheet__header {
+  position: relative;
+  flex-shrink: 0;
+  padding: 12px 16px 8px;
+  cursor: grab;
+  touch-action: none;
+}
+
+.bottom-sheet__header:active {
+  cursor: grabbing;
+}
+
+.bottom-sheet__handle {
+  display: block;
+  width: 40px;
+  height: 24px;
+  margin: 0 auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+}
+
+.bottom-sheet__handle::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 4px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .bottom-sheet__handle::after {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.bottom-sheet__close {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.bottom-sheet__body {
+  flex: 1;
+  overflow: auto;
+  padding: 8px 24px 32px;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
