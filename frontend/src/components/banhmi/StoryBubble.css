@@ -1,0 +1,150 @@
+.story-bubble {
+  position: absolute;
+  z-index: var(--bm-z-bubble);
+  transform: translateY(-50%);
+  border-radius: var(--bm-radius-lg);
+  padding: 16px 18px;
+  overflow: hidden;
+}
+
+.story-bubble--collapsed {
+  width: 260px;
+}
+
+.story-bubble--expanded {
+  width: min(520px, calc(100vw - 48px));
+  padding: 20px 22px 22px;
+}
+
+/* Decorative warmth behind the glass. */
+.story-bubble__glow {
+  position: absolute;
+  inset: -30% -20% auto -20%;
+  height: 70%;
+  pointer-events: none;
+  background: radial-gradient(
+    60% 100% at 30% 0%,
+    rgba(255, 107, 74, 0.22),
+    transparent 70%
+  );
+}
+
+.story-bubble__year {
+  position: relative;
+  margin: 0 0 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bm-coral);
+}
+
+.story-bubble__title {
+  position: relative;
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--bm-ink);
+}
+
+.story-bubble--expanded .story-bubble__year,
+.story-bubble--expanded .story-bubble__title {
+  text-align: center;
+}
+
+.story-bubble--expanded .story-bubble__title {
+  font-size: 1.35rem;
+  padding: 0 28px;
+}
+
+.story-bubble__explore {
+  position: relative;
+  margin-top: 14px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: none;
+  border-radius: var(--bm-radius-pill);
+  background: var(--bm-coral);
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.story-bubble__explore:hover {
+  background: #f45b39;
+}
+
+.story-bubble__body {
+  position: relative;
+  margin-top: 14px;
+}
+
+.story-bubble__body::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.story-bubble__image {
+  float: left;
+  width: 34%;
+  height: auto;
+  margin: 2px 14px 6px 0;
+  border-radius: var(--bm-radius-md);
+  background: rgba(255, 255, 255, 0.6);
+  shape-outside: inset(0 round var(--bm-radius-md));
+  shape-margin: 10px;
+}
+
+.story-bubble__text {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--bm-ink);
+  hyphens: auto;
+}
+
+.story-bubble__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--bm-ink-muted);
+  border-radius: var(--bm-radius-pill);
+}
+
+.story-bubble__close:hover {
+  color: var(--bm-ink);
+  background: rgba(28, 27, 31, 0.06);
+}
+
+/* Below 720px the anchor is ignored entirely and the card becomes a sheet
+   sitting above the timeline. */
+.story-bubble--sheet {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 108px;
+  top: auto;
+  width: auto;
+  max-height: 52vh;
+  overflow-y: auto;
+  transform: none;
+}
+
+.story-bubble--sheet.story-bubble--expanded {
+  width: auto;
+}
+
+@media (max-width: 719px) {
+  .story-bubble__image {
+    width: 40%;
+  }
+}

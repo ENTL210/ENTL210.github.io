@@ -12,11 +12,14 @@
   "dependencies": {
     "@breezystack/lamejs": "^1.2.7",
     "@fontsource/inter": "^5.2.8",
+    "d3-geo": "^3.1.1",
     "framer-motion": "^12.42.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.18.1",
-    "wavesurfer.js": "^7.12.10"
+    "topojson-client": "^3.1.0",
+    "wavesurfer.js": "^7.12.10",
+    "world-atlas": "^2.0.2"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",

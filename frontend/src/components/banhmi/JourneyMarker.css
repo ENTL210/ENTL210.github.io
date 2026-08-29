@@ -1,0 +1,49 @@
+.journey-marker {
+  cursor: pointer;
+}
+
+.journey-marker:focus {
+  outline: none;
+}
+
+.journey-marker:focus-visible .journey-marker__dot {
+  stroke: var(--bm-route);
+  stroke-width: 3;
+}
+
+/* Decorative only. Must never intercept a click meant for the marker. */
+.journey-marker__pulse {
+  pointer-events: none;
+  fill: none;
+  stroke: var(--bm-go);
+  stroke-width: 2.5;
+}
+
+.journey-marker__hit {
+  fill: transparent;
+  pointer-events: all;
+}
+
+.journey-marker__dot {
+  pointer-events: none;
+  stroke: #ffffff;
+  stroke-width: 2;
+}
+
+.journey-marker--active .journey-marker__dot {
+  fill: var(--bm-go);
+}
+
+.journey-marker--visited .journey-marker__dot {
+  fill: var(--bm-coral);
+}
+
+.journey-marker--upcoming .journey-marker__dot {
+  fill: var(--bm-ink-muted);
+  opacity: 0.45;
+  stroke-opacity: 0.5;
+}
+
+.journey-marker--upcoming:hover .journey-marker__dot {
+  opacity: 0.85;
+}

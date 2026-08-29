@@ -1,0 +1,24 @@
+.banhmi-page__main {
+  position: relative;
+  z-index: var(--bm-z-content);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 88px 20px 108px;
+}
+
+.banhmi-stage {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+}
+
+@media (max-width: 719px) {
+  .banhmi-page__main {
+    align-items: flex-start;
+    padding: 84px 12px 0;
+    min-height: 0;
+  }
+}

@@ -1,0 +1,12 @@
+/* Purely decorative: the trail never receives pointer events. */
+.journey-path {
+  pointer-events: none;
+}
+
+.journey-path__line {
+  fill: none;
+  stroke: var(--bm-route);
+  stroke-width: 2.5;
+  stroke-dasharray: 6 6;
+  stroke-linecap: round;
+}

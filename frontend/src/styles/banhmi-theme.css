@@ -1,0 +1,112 @@
+/* Scoped to .banhmi-page. Nothing here leaks into the shared theme.css tokens.
+   This page is light-mode only and is deliberately not wired to data-theme. */
+
+.banhmi-page {
+  /* Surfaces */
+  --bm-bg: #faf7f2;
+  --bm-ink: #1c1b1f;
+  --bm-ink-muted: #6b6560;
+
+  /* Accents */
+  --bm-coral: #ff6b4a;
+  --bm-gold: #fbb040;
+  --bm-herb: #3fae73;
+
+  /* Map */
+  --bm-mint: #a8d5ba;
+  --bm-mint-dark: #7fbe99;
+  --bm-tan: #e4d3a6;
+  --bm-sky: #7fd1e8;
+  --bm-route: #e8503a;
+
+  /* Controls */
+  --bm-go: #34c759;
+  --bm-pause: #ff9f0a;
+
+  /* Glass. Blur and saturate match the shared .glass utility so this page
+     reads as the same material; the shadow is added per-surface. */
+  --bm-glass-bg: rgba(255, 255, 255, 0.72);
+  --bm-glass-border: rgba(255, 255, 255, 0.8);
+  --bm-glass-blur: blur(20px) saturate(160%);
+  --bm-glass-shadow: 0 8px 32px rgba(28, 27, 31, 0.08);
+
+  /* Radii */
+  --bm-radius-sm: 10px;
+  --bm-radius-md: 16px;
+  --bm-radius-lg: 24px;
+  --bm-radius-pill: 999px;
+
+  /* Stacking scale. No component may invent its own numeric z-index. */
+  --bm-z-backdrop: 0;
+  --bm-z-content: 1;
+  --bm-z-map-ocean: 0;
+  --bm-z-map-land: 1;
+  --bm-z-map-path: 2;
+  --bm-z-map-marker: 3;
+  --bm-z-bubble: 20;
+  --bm-z-timeline: 40;
+  --bm-z-navbar: 50;
+  --bm-z-modal-backdrop: 90;
+  --bm-z-modal: 100;
+
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--bm-bg);
+  color: var(--bm-ink);
+  color-scheme: light;
+  overflow-x: hidden;
+}
+
+.banhmi-glass {
+  background: var(--bm-glass-bg);
+  backdrop-filter: var(--bm-glass-blur);
+  -webkit-backdrop-filter: var(--bm-glass-blur);
+  border: 1px solid var(--bm-glass-border);
+  box-shadow: var(--bm-glass-shadow);
+}
+
+/* Warm blobs behind the content so the glass panels have something to refract. */
+.banhmi-page__mesh {
+  position: fixed;
+  inset: 0;
+  z-index: var(--bm-z-backdrop);
+  pointer-events: none;
+  background:
+    radial-gradient(
+      42rem 30rem at 12% 18%,
+      rgba(255, 107, 74, 0.18),
+      transparent 65%
+    ),
+    radial-gradient(
+      38rem 28rem at 88% 26%,
+      rgba(251, 176, 64, 0.16),
+      transparent 65%
+    ),
+    radial-gradient(
+      46rem 32rem at 50% 96%,
+      rgba(168, 213, 186, 0.2),
+      transparent 68%
+    );
+  filter: blur(40px);
+}
+
+.banhmi-page :focus-visible {
+  outline: 3px solid var(--bm-route);
+  outline-offset: 2px;
+}
+
+.banhmi-page button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banhmi-page *,
+  .banhmi-page *::before,
+  .banhmi-page *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,124 @@
+/* position: fixed creates a stacking context, so this wrapper needs to be
+   raised itself; the backdrop and panel z-indexes below only order the two
+   against each other, not against the rest of the page. */
+.bib-modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--bm-z-modal-backdrop);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.bib-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: var(--bm-z-modal-backdrop);
+  background: rgba(28, 27, 31, 0.42);
+}
+
+.bib-modal {
+  position: relative;
+  z-index: var(--bm-z-modal);
+  width: 100%;
+  max-width: 640px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--bm-radius-lg);
+  overflow: hidden;
+}
+
+.bib-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 12px 12px 22px;
+  border-bottom: 1px solid rgba(28, 27, 31, 0.08);
+}
+
+.bib-modal__heading {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--bm-ink);
+}
+
+.bib-modal__close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--bm-ink-muted);
+  border-radius: var(--bm-radius-pill);
+}
+
+.bib-modal__close:hover {
+  color: var(--bm-ink);
+  background: rgba(28, 27, 31, 0.06);
+}
+
+.bib-modal__list {
+  margin: 0;
+  padding: 8px 22px 22px;
+  list-style: none;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bib-modal__item {
+  display: flex;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(28, 27, 31, 0.07);
+}
+
+.bib-modal__item:last-child {
+  border-bottom: none;
+}
+
+.bib-modal__n {
+  flex: 0 0 auto;
+  min-width: 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--bm-coral);
+}
+
+.bib-modal__entry {
+  min-width: 0;
+}
+
+.bib-modal__title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--bm-ink);
+}
+
+.bib-modal__publisher {
+  margin: 2px 0 0;
+  font-size: 0.875rem;
+  color: var(--bm-ink-muted);
+}
+
+.bib-modal__note {
+  margin: 4px 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--bm-ink-muted);
+}
+
+.bib-modal__link {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 4px 0;
+  font-size: 0.8125rem;
+  color: var(--bm-coral);
+  overflow-wrap: anywhere;
+}

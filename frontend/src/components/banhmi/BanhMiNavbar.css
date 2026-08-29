@@ -1,0 +1,68 @@
+.banhmi-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--bm-z-navbar);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px max(16px, env(safe-area-inset-left, 0px)) 12px
+    max(16px, env(safe-area-inset-right, 0px));
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.banhmi-navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.banhmi-navbar__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--bm-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.banhmi-navbar__flag {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 17px;
+  border: 1px solid rgba(28, 27, 31, 0.12);
+  border-radius: 3px;
+}
+
+.banhmi-navbar__bib {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 0 20px;
+  border: none;
+  border-radius: var(--bm-radius-pill);
+  background: var(--bm-coral);
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.banhmi-navbar__bib:hover {
+  background: #f45b39;
+}
+
+@media (max-width: 480px) {
+  .banhmi-navbar__title {
+    font-size: 0.9375rem;
+  }
+
+  .banhmi-navbar__bib {
+    padding: 0 14px;
+  }
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Vietnamese banh mi sandwich">
+  <rect width="400" height="300" fill="#FFF8F0"/>
+  <ellipse cx="200" cy="200" rx="120" ry="35" fill="#D4A574"/>
+  <path d="M100 195 Q200 140 300 195 L290 210 Q200 170 110 210 Z" fill="#E8C49A"/>
+  <rect x="130" y="175" width="140" height="8" rx="4" fill="#3FAE73"/>
+  <rect x="140" y="188" width="120" height="6" rx="3" fill="#FF6B4A"/>
+  <ellipse cx="170" cy="182" rx="12" ry="6" fill="#FBB040"/>
+  <ellipse cx="230" cy="180" rx="10" ry="5" fill="#A8D5BA"/>
+</svg>

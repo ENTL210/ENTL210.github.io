@@ -1,0 +1,125 @@
+.timeline-scrubber {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--bm-z-timeline);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px max(16px, env(safe-area-inset-left, 0px)) calc(14px + env(safe-area-inset-bottom, 0px))
+    max(16px, env(safe-area-inset-right, 0px));
+  border-radius: var(--bm-radius-lg) var(--bm-radius-lg) 0 0;
+  border-bottom: none;
+}
+
+.timeline-scrubber__play {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: none;
+  border-radius: var(--bm-radius-pill);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(28, 27, 31, 0.18);
+}
+
+.timeline-scrubber__play--paused {
+  background: var(--bm-go);
+}
+
+.timeline-scrubber__play--playing {
+  background: var(--bm-pause);
+}
+
+.timeline-scrubber__play-icon {
+  display: grid;
+  place-items: center;
+  grid-area: 1 / 1;
+}
+
+.timeline-scrubber__track {
+  position: relative;
+  flex: 1 1 auto;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  /* Half a dot's tappable width on each side so the end dots stay on screen. */
+  margin: 0 22px;
+}
+
+.timeline-scrubber__rail,
+.timeline-scrubber__fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  border-radius: var(--bm-radius-pill);
+  pointer-events: none;
+}
+
+.timeline-scrubber__rail {
+  background: var(--bm-ink-muted);
+  opacity: 0.22;
+}
+
+.timeline-scrubber__fill {
+  background: var(--bm-coral);
+  transform-origin: left center;
+}
+
+.timeline-scrubber__dots {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Visible dot stays small; padding carries it to a 44px tappable area. */
+.timeline-scrubber__dot {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: 0 -22px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: var(--bm-radius-pill);
+}
+
+.timeline-scrubber__dot-visual {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--bm-radius-pill);
+  background: var(--bm-ink-muted);
+  opacity: 0.4;
+  box-shadow: 0 0 0 3px var(--bm-glass-bg);
+  transition:
+    width 0.2s ease,
+    height 0.2s ease,
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.timeline-scrubber__dot--visited .timeline-scrubber__dot-visual {
+  background: var(--bm-coral);
+  opacity: 1;
+}
+
+.timeline-scrubber__dot--active .timeline-scrubber__dot-visual {
+  width: 16px;
+  height: 16px;
+  background: var(--bm-coral);
+  opacity: 1;
+}
+
+.timeline-scrubber__dot:hover .timeline-scrubber__dot-visual {
+  opacity: 1;
+}
