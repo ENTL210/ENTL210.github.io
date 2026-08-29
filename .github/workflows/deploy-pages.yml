@@ -40,6 +40,9 @@ jobs:
           [ -n "${{ secrets.VITE_API_URL }}" ] && export VITE_API_URL="${{ secrets.VITE_API_URL }}"
           [ -n "${{ secrets.VITE_APP_SECRET }}" ] && export VITE_APP_SECRET="${{ secrets.VITE_APP_SECRET }}"
           [ -n "${{ secrets.VITE_HIDDEN_ROUTE }}" ] && export VITE_HIDDEN_ROUTE="${{ secrets.VITE_HIDDEN_ROUTE }}"
+          [ -n "${{ secrets.VITE_HUM100_ROUTE }}" ] && export VITE_HUM100_ROUTE="${{ secrets.VITE_HUM100_ROUTE }}"
+          # `npm run build` also copies dist/index.html to dist/404.html, which is
+          # what makes client-side routes resolve on GitHub Pages.
           npm run build
 
       - name: Upload Pages artifact

@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Ancient flatbread in the Fertile Crescent">
-  <rect width="400" height="300" fill="#F5E6D3"/>
-  <ellipse cx="200" cy="220" rx="140" ry="24" fill="#C4A882" opacity="0.5"/>
-  <ellipse cx="200" cy="175" rx="90" ry="28" fill="#D4A574"/>
-  <ellipse cx="200" cy="170" rx="80" ry="22" fill="#E8C49A"/>
-  <circle cx="120" cy="100" r="28" fill="#FBB040" opacity="0.6"/>
-  <circle cx="300" cy="80" r="20" fill="#FF6B4A" opacity="0.4"/>
-</svg>

@@ -70,55 +70,20 @@
   -webkit-overflow-scrolling: touch;
 }
 
+/* APA hanging indent: first line flush, continuations indented. */
 .bib-modal__item {
-  display: flex;
-  gap: 12px;
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(28, 27, 31, 0.07);
-}
-
-.bib-modal__item:last-child {
-  border-bottom: none;
-}
-
-.bib-modal__n {
-  flex: 0 0 auto;
-  min-width: 1.5rem;
+  padding: 0 0 16px;
+  padding-left: 2em;
+  text-indent: -2em;
   font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--bm-coral);
+  line-height: 1.6;
 }
 
-.bib-modal__entry {
-  min-width: 0;
-}
-
-.bib-modal__title {
-  margin: 0;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  line-height: 1.4;
+.bib-modal__apa {
   color: var(--bm-ink);
 }
 
-.bib-modal__publisher {
-  margin: 2px 0 0;
-  font-size: 0.875rem;
-  color: var(--bm-ink-muted);
-}
-
-.bib-modal__note {
-  margin: 4px 0 0;
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  color: var(--bm-ink-muted);
-}
-
 .bib-modal__link {
-  display: inline-block;
-  margin-top: 6px;
-  padding: 4px 0;
-  font-size: 0.8125rem;
-  color: var(--bm-coral);
+  color: var(--bm-coral-text);
   overflow-wrap: anywhere;
 }

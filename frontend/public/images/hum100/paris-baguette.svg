@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Baguettes in a Paris bakery">
-  <rect width="400" height="300" fill="#E8F4F8"/>
-  <rect x="80" y="80" width="240" height="160" rx="8" fill="#FFF" stroke="#DDD" stroke-width="2"/>
-  <ellipse cx="140" cy="170" rx="28" ry="80" fill="#D4A574" transform="rotate(-8 140 170)"/>
-  <ellipse cx="200" cy="165" rx="28" ry="85" fill="#C4956A" transform="rotate(4 200 165)"/>
-  <ellipse cx="260" cy="172" rx="26" ry="78" fill="#D4A574" transform="rotate(-5 260 172)"/>
-  <rect x="100" y="60" width="200" height="24" rx="4" fill="#3FAE73" opacity="0.3"/>
-</svg>

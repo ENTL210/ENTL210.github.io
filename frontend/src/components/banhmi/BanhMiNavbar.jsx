@@ -23,7 +23,7 @@ export default function BanhMiNavbar({ bibliographyButtonRef, onOpenBibliography
   const reduceMotion = useReducedMotion();
 
   return (
-    <header className="banhmi-navbar banhmi-glass">
+    <header className="banhmi-navbar bm-glass">
       <div className="banhmi-navbar__brand">
         <h1 className="banhmi-navbar__title">The History of Bánh Mì</h1>
         <VietnamFlag />

@@ -1,24 +1,8 @@
-.banhmi-page__main {
-  position: relative;
+/* The map runs edge to edge under the translucent navbar, which is what lets
+   the navbar read as glass over the map rather than over page background. */
+.banhmi-map-wrap {
+  position: fixed;
+  inset: 0;
   z-index: var(--bm-z-content);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  min-height: 100dvh;
-  padding: 88px 20px 108px;
-}
-
-.banhmi-stage {
-  position: relative;
-  width: 100%;
-  max-width: 1100px;
-}
-
-@media (max-width: 719px) {
-  .banhmi-page__main {
-    align-items: flex-start;
-    padding: 84px 12px 0;
-    min-height: 0;
-  }
+  overflow: hidden;
 }

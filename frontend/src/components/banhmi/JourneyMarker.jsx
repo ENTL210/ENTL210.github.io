@@ -30,39 +30,50 @@ export default function JourneyMarker({
       onClick={onSelect}
       onKeyDown={handleKeyDown}
     >
-      {isActive && !hideDot ? (
-        <motion.circle
-          className="journey-marker__pulse"
-          cx={cx}
-          cy={cy}
-          initial={
-            reduceMotion ? { r: 12, opacity: 0.35 } : { r: 7, opacity: 0.6 }
-          }
-          animate={
-            reduceMotion
-              ? { r: 12, opacity: 0.35 }
-              : { r: [7, 22], opacity: [0.6, 0] }
-          }
-          transition={
-            reduceMotion
-              ? { duration: 0 }
-              : { ...springBouncy, repeat: Infinity, repeatDelay: 0.35 }
-          }
-        />
-      ) : null}
+      {/* Geometry is authored around the origin and moved into place by this
+          transform, which also carries the inverse-zoom scale. That keeps the
+          pin, its ring, and its hit area a constant size on screen at every
+          camera zoom without touching their radii. */}
+      <g
+        className="journey-marker__scale"
+        style={{
+          transform: `translate(${cx}px, ${cy}px) scale(var(--bm-map-scale))`,
+        }}
+      >
+        {isActive && !hideDot ? (
+          <motion.circle
+            className="journey-marker__pulse"
+            cx={0}
+            cy={0}
+            initial={
+              reduceMotion ? { r: 12, opacity: 0.35 } : { r: 7, opacity: 0.6 }
+            }
+            animate={
+              reduceMotion
+                ? { r: 12, opacity: 0.35 }
+                : { r: [7, 22], opacity: [0.6, 0] }
+            }
+            transition={
+              reduceMotion
+                ? { duration: 0 }
+                : { ...springBouncy, repeat: Infinity, repeatDelay: 0.35 }
+            }
+          />
+        ) : null}
 
-      <circle className="journey-marker__hit" cx={cx} cy={cy} r={hitRadius} />
+        <circle className="journey-marker__hit" cx={0} cy={0} r={hitRadius} />
 
-      {hideDot ? null : (
-        <motion.circle
-          className="journey-marker__dot"
-          cx={cx}
-          cy={cy}
-          initial={false}
-          animate={{ r: isActive ? 7 : state === "visited" ? 4.5 : 3.5 }}
-          transition={reduceMotion ? { duration: 0 } : springBouncy}
-        />
-      )}
+        {hideDot ? null : (
+          <motion.circle
+            className="journey-marker__dot"
+            cx={0}
+            cy={0}
+            initial={false}
+            animate={{ r: isActive ? 7 : state === "visited" ? 4.5 : 3.5 }}
+            transition={reduceMotion ? { duration: 0 } : springBouncy}
+          />
+        )}
+      </g>
     </g>
   );
 }

@@ -5,7 +5,7 @@ import BanhMiHistory from "./pages/BanhMiHistory";
 
 const HIDDEN_ROUTE = import.meta.env.VITE_HIDDEN_ROUTE || "/ed-tools";
 const HUM100_ROUTE =
-  import.meta.env.VITE_HUM100_ROUTE || "/ed-mini-projects/hum100-final";
+  import.meta.env.VITE_HUM100_ROUTE || "/ed-projects/HUM100-Final";
 const BASENAME = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 export default function App() {

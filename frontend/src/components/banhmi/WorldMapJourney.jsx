@@ -1,10 +1,12 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { useSpring, useTransform } from "framer-motion";
 import {
   MAP_HEIGHT,
   MAP_WIDTH,
   countryFeatures,
   pathGenerator,
 } from "../../utils/mapProjection";
+import { springCamera } from "../../motion";
 import JourneyMarker from "./JourneyMarker";
 import JourneyPath from "./JourneyPath";
 import "./WorldMapJourney.css";
@@ -32,8 +34,19 @@ export default function WorldMapJourney({
   stops,
   points,
   currentStopIndex,
+  camera,
+  reduceMotion,
   onSelectStop,
 }) {
+  const svgRef = useRef(null);
+  // Rendered once and never updated, so React leaves the attribute alone after
+  // mount. If the live camera were interpolated into JSX instead, every stop
+  // change would snap the viewBox to its target for a frame before the spring
+  // eased in from the old value.
+  const initialViewBox = useRef(
+    `${camera.x} ${camera.y} ${camera.w} ${camera.h}`,
+  );
+
   const countries = useMemo(
     () =>
       countryFeatures.map((feature, index) => ({
@@ -43,6 +56,54 @@ export default function WorldMapJourney({
       })),
     [],
   );
+
+  const x = useSpring(camera.x, springCamera);
+  const y = useSpring(camera.y, springCamera);
+  const width = useSpring(camera.w, springCamera);
+  const height = useSpring(camera.h, springCamera);
+
+  useEffect(() => {
+    if (reduceMotion) {
+      x.jump(camera.x);
+      y.jump(camera.y);
+      width.jump(camera.w);
+      height.jump(camera.h);
+      return;
+    }
+    x.set(camera.x);
+    y.set(camera.y);
+    width.set(camera.w);
+    height.set(camera.h);
+  }, [camera, reduceMotion, x, y, width, height]);
+
+  const viewBox = useTransform(
+    [x, y, width, height],
+    ([vx, vy, vw, vh]) => `${vx} ${vy} ${vw} ${vh}`,
+  );
+
+  // Read from the live spring, not the target, so size compensation tracks the
+  // camera instead of lagging it. Equals 1 / zoom.
+  const inverseZoom = useTransform(height, (h) => h / MAP_HEIGHT);
+
+  // One subscription drives everything that must hold a constant apparent size.
+  // Markers scale themselves through this custom property, and stroke widths
+  // and dash lengths are calc()ed from it, so no per-element work is needed.
+  useEffect(() => {
+    const applyViewBox = (value) =>
+      svgRef.current?.setAttribute("viewBox", value);
+    const applyScale = (value) =>
+      svgRef.current?.style.setProperty("--bm-map-scale", String(value));
+
+    applyViewBox(viewBox.get());
+    applyScale(inverseZoom.get());
+
+    const unsubscribeViewBox = viewBox.on("change", applyViewBox);
+    const unsubscribeScale = inverseZoom.on("change", applyScale);
+    return () => {
+      unsubscribeViewBox();
+      unsubscribeScale();
+    };
+  }, [viewBox, inverseZoom]);
 
   function markerState(index) {
     if (currentStopIndex == null) return index === 0 ? "active" : "upcoming";
@@ -94,18 +155,21 @@ export default function WorldMapJourney({
 
   return (
     <svg
+      ref={svgRef}
       className="banhmi-map"
-      viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
-      preserveAspectRatio="xMidYMid meet"
+      viewBox={initialViewBox.current}
+      preserveAspectRatio="xMidYMid slice"
       role="group"
       aria-label="World map showing the journey of bread from the Fertile Crescent to Saigon"
     >
+      {/* Oversized so the camera can frame past the projection's extent on tall
+          viewports without exposing page background behind the map. */}
       <rect
         className="banhmi-map__ocean"
-        x="0"
-        y="0"
-        width={MAP_WIDTH}
-        height={MAP_HEIGHT}
+        x={-MAP_WIDTH}
+        y={-MAP_HEIGHT}
+        width={MAP_WIDTH * 3}
+        height={MAP_HEIGHT * 3}
       />
 
       <g className="banhmi-map__land" aria-hidden="true">

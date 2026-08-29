@@ -16,7 +16,7 @@ function segmentPath([ax, ay], [bx, by]) {
   if (distance < DEGENERATE_DISTANCE) {
     // A short hook that leaves the marker and curls back, so the final leg
     // still reads as movement instead of an artifact.
-    return `M ${ax} ${ay} C ${ax + 26} ${ay - 30} ${bx + 34} ${by - 4} ${bx} ${by}`;
+    return `M ${ax} ${ay} C ${ax + 13} ${ay - 15} ${bx + 17} ${by - 2} ${bx} ${by}`;
   }
 
   const midX = (ax + bx) / 2;
@@ -50,11 +50,8 @@ export default function JourneyPath({ points, currentStopIndex }) {
                 mask keeps both. */}
             <mask id={maskId} maskUnits="userSpaceOnUse">
               <motion.path
+                className="journey-path__reveal"
                 d={d}
-                fill="none"
-                stroke="#ffffff"
-                strokeWidth={14}
-                strokeLinecap="round"
                 initial={reduceMotion ? { pathLength: 1 } : { pathLength: 0 }}
                 animate={{ pathLength: 1 }}
                 transition={reduceMotion ? { duration: 0 } : springSoft}

@@ -20,6 +20,10 @@ function CloseIcon() {
   );
 }
 
+// APA orders the reference list alphabetically by leading author or
+// organization, which is what the `apa` string starts with.
+const orderedSources = [...sources].sort((a, b) => a.apa.localeCompare(b.apa));
+
 export default function BibliographyModal({ open, onClose, returnFocusRef }) {
   const reduceMotion = useReducedMotion();
   const panelRef = useRef(null);
@@ -85,7 +89,7 @@ export default function BibliographyModal({ open, onClose, returnFocusRef }) {
 
           <motion.div
             ref={panelRef}
-            className="bib-modal banhmi-glass"
+            className="bib-modal bm-glass bm-glass--strong"
             role="dialog"
             aria-modal="true"
             aria-labelledby={headingId}
@@ -110,26 +114,21 @@ export default function BibliographyModal({ open, onClose, returnFocusRef }) {
               </motion.button>
             </div>
 
-            <ol className="bib-modal__list">
-              {sources.map((source) => (
-                <li key={source.n} className="bib-modal__item">
-                  <span className="bib-modal__n">{source.n}</span>
-                  <div className="bib-modal__entry">
-                    <p className="bib-modal__title">{source.title}</p>
-                    <p className="bib-modal__publisher">{source.publisher}</p>
-                    <p className="bib-modal__note">{source.note}</p>
-                    <a
-                      className="bib-modal__link"
-                      href={source.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {source.url}
-                    </a>
-                  </div>
+            <ul className="bib-modal__list">
+              {orderedSources.map((source) => (
+                <li key={source.id} className="bib-modal__item">
+                  <span className="bib-modal__apa">{source.apa}</span>{" "}
+                  <a
+                    className="bib-modal__link"
+                    href={source.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {source.url}
+                  </a>
                 </li>
               ))}
-            </ol>
+            </ul>
           </motion.div>
         </motion.div>
       ) : null}

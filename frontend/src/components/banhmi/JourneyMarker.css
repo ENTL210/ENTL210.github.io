@@ -6,6 +6,13 @@
   outline: none;
 }
 
+/* transform-box: view-box makes the px units in the inline transform mean SVG
+   user units, and origin 0 0 makes scale() pivot on the translated point. */
+.journey-marker__scale {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
 .journey-marker:focus-visible .journey-marker__dot {
   stroke: var(--bm-route);
   stroke-width: 3;

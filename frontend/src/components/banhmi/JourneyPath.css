@@ -3,10 +3,21 @@
   pointer-events: none;
 }
 
+/* The path geometry has to stay in true map coordinates, so unlike the markers
+   it cannot be counter-scaled by a transform. Stroke width and dash length are
+   divided by the camera zoom instead, holding a constant apparent size. */
 .journey-path__line {
   fill: none;
   stroke: var(--bm-route);
-  stroke-width: 2.5;
-  stroke-dasharray: 6 6;
+  stroke-width: calc(2.5px * var(--bm-map-scale));
+  stroke-dasharray: calc(6px * var(--bm-map-scale))
+    calc(6px * var(--bm-map-scale));
+  stroke-linecap: round;
+}
+
+.journey-path__reveal {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: calc(14px * var(--bm-map-scale));
   stroke-linecap: round;
 }

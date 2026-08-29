@@ -1,4 +1,9 @@
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  useTransform,
+} from "framer-motion";
 import { springSoft, springBouncy } from "../../motion";
 import "./TimelineScrubber.css";
 
@@ -22,23 +27,31 @@ function PauseIcon() {
 export default function TimelineScrubber({
   stops,
   currentStopIndex,
+  stopProgress,
   isPlaying,
   onTogglePlay,
   onSelectStop,
 }) {
   const reduceMotion = useReducedMotion();
   const started = currentStopIndex != null;
-  const progress =
-    stops.length > 1 ? (currentStopIndex ?? 0) / (stops.length - 1) : 0;
+  const lastIndex = stops.length - 1;
+
+  // Fractional position along the track, so the fill slides continuously
+  // between dots while auto-play runs instead of stepping.
+  const fillWidth = useTransform(stopProgress, (progress) => {
+    if (currentStopIndex == null || lastIndex < 1) return "0%";
+    const position = Math.min(lastIndex, currentStopIndex + progress);
+    return `${(position / lastIndex) * 100}%`;
+  });
 
   return (
     <AnimatePresence>
       {started ? (
         <motion.div
-          className="timeline-scrubber banhmi-glass"
-          initial={reduceMotion ? { opacity: 0 } : { y: "120%" }}
+          className="timeline-scrubber bm-glass"
+          initial={reduceMotion ? { opacity: 0 } : { y: "160%" }}
           animate={reduceMotion ? { opacity: 1 } : { y: 0 }}
-          exit={reduceMotion ? { opacity: 0 } : { y: "120%" }}
+          exit={reduceMotion ? { opacity: 0 } : { y: "160%" }}
           transition={reduceMotion ? { duration: 0.15 } : springSoft}
         >
           <motion.button
@@ -73,9 +86,7 @@ export default function TimelineScrubber({
             <motion.div
               className="timeline-scrubber__fill"
               aria-hidden="true"
-              initial={false}
-              animate={{ scaleX: progress }}
-              transition={reduceMotion ? { duration: 0.15 } : springSoft}
+              style={{ width: fillWidth }}
             />
             <div className="timeline-scrubber__dots">
               {stops.map((stop, index) => {
