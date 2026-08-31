@@ -218,6 +218,16 @@
   cursor: default;
 }
 
+.story-bubble__hint {
+  font-size: 0.75rem;
+  color: var(--bm-ink-muted);
+  white-space: nowrap;
+}
+
+.story-bubble__body:focus-visible {
+  outline-offset: -3px;
+}
+
 /* Below 720px the anchor is ignored entirely and the card becomes a sheet
    sitting above the timeline. */
 .story-bubble--sheet {

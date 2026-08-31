@@ -27,8 +27,9 @@ function PauseIcon() {
 export default function TimelineScrubber({
   stops,
   currentStopIndex,
-  stopProgress,
+  fillPosition,
   isPlaying,
+  isWaitingOnReader,
   onTogglePlay,
   onSelectStop,
 }) {
@@ -36,12 +37,13 @@ export default function TimelineScrubber({
   const started = currentStopIndex != null;
   const lastIndex = stops.length - 1;
 
-  // Fractional position along the track, so the fill slides continuously
-  // between dots while auto-play runs instead of stepping.
-  const fillWidth = useTransform(stopProgress, (progress) => {
+  // Driven by a fractional stop index rather than a countdown: it sweeps across
+  // during a transition and then holds exactly on the dot while the tour waits
+  // for the reader, since nothing is ticking down.
+  const fillWidth = useTransform(fillPosition, (position) => {
     if (currentStopIndex == null || lastIndex < 1) return "0%";
-    const position = Math.min(lastIndex, currentStopIndex + progress);
-    return `${(position / lastIndex) * 100}%`;
+    const clamped = Math.min(lastIndex, Math.max(0, position));
+    return `${(clamped / lastIndex) * 100}%`;
   });
 
   return (
@@ -60,7 +62,7 @@ export default function TimelineScrubber({
               isPlaying
                 ? "timeline-scrubber__play--playing"
                 : "timeline-scrubber__play--paused"
-            }`}
+            } ${isWaitingOnReader ? "timeline-scrubber__play--waiting" : ""}`}
             aria-label={isPlaying ? "Pause the journey" : "Play the journey"}
             aria-pressed={isPlaying}
             onClick={onTogglePlay}

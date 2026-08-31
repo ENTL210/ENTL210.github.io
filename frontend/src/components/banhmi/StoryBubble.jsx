@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { springSoft, springBouncy } from "../../motion";
 import "./StoryBubble.css";
@@ -14,6 +20,27 @@ const EXPANDED_MAX_HEIGHT = 520;
 // card is anchored by its top edge, which needs the height up front.
 const expandedHeight = (viewportHeight) =>
   Math.min(EXPANDED_MAX_HEIGHT, viewportHeight - NAVBAR_HEIGHT - 160);
+
+// Guided-tour auto-scroll. Reading pace, with the duration derived from the
+// content length so a longer card takes longer rather than scrolling faster.
+const AUTO_SCROLL_START_DELAY_MS = 1200;
+const AUTO_SCROLL_PX_PER_SECOND = 28;
+const AUTO_SCROLL_MIN_MS = 6000;
+const AUTO_SCROLL_MAX_MS = 30000;
+const AT_BOTTOM_EPSILON = 2;
+
+// Keys that scroll a container. Pressing one during the tour is the reader
+// taking over, so the tour steps aside.
+const SCROLL_KEYS = new Set([
+  "ArrowUp",
+  "ArrowDown",
+  "PageUp",
+  "PageDown",
+  "Home",
+  "End",
+  " ",
+  "Spacebar",
+]);
 
 function useIsNarrow() {
   const [isNarrow, setIsNarrow] = useState(
@@ -53,9 +80,12 @@ export default function StoryBubble({
   camera,
   viewport,
   isExpanded,
+  isTouring,
   onExpand,
   onCollapse,
   onSelectStop,
+  onTourScrollEnd,
+  onTourInterrupt,
 }) {
   const reduceMotion = useReducedMotion();
   const isNarrow = useIsNarrow();
@@ -64,6 +94,11 @@ export default function StoryBubble({
 
   const isFirst = stopIndex === 0;
   const isLast = stopIndex === stopCount - 1;
+
+  // While the tour is running, Next stays shut until the reader has reached the
+  // end of the card. Handing control back drops isTouring and lifts the gate.
+  const isNextGated = isTouring && hasMoreBelow;
+  const autoScrolling = isTouring && isExpanded && !reduceMotion;
 
   // The marker's live screen position, derived from the same camera rect the
   // map is animating toward, so the card follows its pin as the view zooms.
@@ -99,7 +134,9 @@ export default function StoryBubble({
     setHasMoreBelow(el.scrollHeight - el.scrollTop - el.clientHeight > 4);
   }, []);
 
-  useEffect(() => {
+  // Measured before paint, so the Next gate is never briefly ungated on the
+  // frame the card opens.
+  useLayoutEffect(() => {
     if (!isExpanded) return undefined;
     const el = bodyRef.current;
     if (!el) return undefined;
@@ -113,8 +150,105 @@ export default function StoryBubble({
     };
   }, [isExpanded, stop.id, syncScrollAffordance]);
 
+  // Auto-scroll. Hand-rolled on requestAnimationFrame rather than smooth
+  // scrollTo or a CSS animation, both of which would have to run to completion
+  // and cannot be abandoned mid-motion at an exact position.
+  useEffect(() => {
+    if (!autoScrolling) return undefined;
+    const el = bodyRef.current;
+    if (!el) return undefined;
+
+    let frame = 0;
+    const startTimer = window.setTimeout(() => {
+      const scrollable = el.scrollHeight - el.clientHeight;
+      if (scrollable - el.scrollTop <= AT_BOTTOM_EPSILON) {
+        onTourScrollEnd();
+        return;
+      }
+
+      const duration = Math.min(
+        AUTO_SCROLL_MAX_MS,
+        Math.max(
+          AUTO_SCROLL_MIN_MS,
+          (scrollable / AUTO_SCROLL_PX_PER_SECOND) * 1000,
+        ),
+      );
+      // Paced over the whole card, so resuming part-way keeps the same speed.
+      const pixelsPerMs = scrollable / duration;
+      let previous = performance.now();
+      // Position is accumulated here rather than by adding to scrollTop each
+      // frame: a sub-pixel increment added to a snapped scrollTop rounds away
+      // to nothing, and the scroll never leaves the top.
+      let position = el.scrollTop;
+
+      const step = (now) => {
+        const node = bodyRef.current;
+        if (!node) return;
+        position += pixelsPerMs * (now - previous);
+        node.scrollTop = position;
+        previous = now;
+        if (
+          node.scrollHeight - node.scrollTop - node.clientHeight <=
+          AT_BOTTOM_EPSILON
+        ) {
+          onTourScrollEnd();
+          return;
+        }
+        frame = requestAnimationFrame(step);
+      };
+      frame = requestAnimationFrame(step);
+    }, AUTO_SCROLL_START_DELAY_MS);
+
+    return () => {
+      window.clearTimeout(startTimer);
+      cancelAnimationFrame(frame);
+    };
+  }, [autoScrolling, stop.id, onTourScrollEnd]);
+
+  // Reader intent. Deliberately not the `scroll` event: the auto-scroll fires
+  // that itself, so the tour would cancel on its own motion. Input events only.
+  useEffect(() => {
+    if (!autoScrolling) return undefined;
+    const el = bodyRef.current;
+    if (!el) return undefined;
+
+    // Pressing Next or Back is navigation, not the reader taking the wheel.
+    const fromFooter = (event) =>
+      event.target instanceof Element &&
+      event.target.closest(".story-bubble__footer");
+
+    const takeOver = (event) => {
+      if (!fromFooter(event)) onTourInterrupt();
+    };
+    const onPointerDown = (event) => {
+      if (fromFooter(event)) return;
+      // Only a grab at the scrollbar counts; clicking the text to select it
+      // is not a scroll.
+      const rect = el.getBoundingClientRect();
+      if (event.clientX >= rect.left + el.clientWidth) onTourInterrupt();
+    };
+    const onKeyDown = (event) => {
+      if (!fromFooter(event) && SCROLL_KEYS.has(event.key)) onTourInterrupt();
+    };
+
+    const passive = { passive: true };
+    el.addEventListener("wheel", takeOver, passive);
+    el.addEventListener("touchstart", takeOver, passive);
+    el.addEventListener("touchmove", takeOver, passive);
+    el.addEventListener("pointerdown", onPointerDown, passive);
+    el.addEventListener("keydown", onKeyDown, passive);
+
+    return () => {
+      el.removeEventListener("wheel", takeOver);
+      el.removeEventListener("touchstart", takeOver);
+      el.removeEventListener("touchmove", takeOver);
+      el.removeEventListener("pointerdown", onPointerDown);
+      el.removeEventListener("keydown", onKeyDown);
+    };
+  }, [autoScrolling, onTourInterrupt]);
+
   function handleKeyDown(event) {
-    if (event.key === "ArrowRight" && !isLast) {
+    if (event.key === "ArrowRight" && !isLast && !isNextGated) {
       event.preventDefault();
       onSelectStop(stopIndex + 1);
     } else if (event.key === "ArrowLeft" && !isFirst) {
@@ -130,6 +264,8 @@ export default function StoryBubble({
       } ${isNarrow ? "story-bubble--sheet" : ""}`}
       style={anchorStyle}
       layout={!reduceMotion}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={reduceMotion ? { duration: 0.15 } : springSoft}
       onKeyDown={handleKeyDown}
       tabIndex={-1}
@@ -154,7 +290,15 @@ export default function StoryBubble({
 
       {isExpanded ? (
         <div className="story-bubble__scroll">
-          <div className="story-bubble__body" ref={bodyRef}>
+          {/* Focusable so arrow, page, home and end keys scroll it natively,
+              which is also what makes those keys detectable as reader intent. */}
+          <div
+            className="story-bubble__body"
+            ref={bodyRef}
+            tabIndex={0}
+            role="region"
+            aria-label={`${stop.title}, full story`}
+          >
             <StopImage stop={stop} />
 
             <p className="story-bubble__text">{stop.content.intro}</p>
@@ -180,12 +324,15 @@ export default function StoryBubble({
               >
                 ← Back
               </button>
+              {isNextGated && !isLast ? (
+                <span className="story-bubble__hint">Scroll to continue</span>
+              ) : null}
               <button
                 type="button"
                 className="story-bubble__nav"
                 aria-label="Go to the next stop"
-                disabled={isLast}
-                aria-disabled={isLast}
+                disabled={isLast || isNextGated}
+                aria-disabled={isLast || isNextGated}
                 onClick={() => onSelectStop(stopIndex + 1)}
               >
                 Next →

@@ -36,6 +36,23 @@
   background: var(--bm-pause);
 }
 
+/* The tour is still running, just waiting on the reader rather than a timer.
+   The global prefers-reduced-motion rule stops this breathing. */
+.timeline-scrubber__play--waiting {
+  animation: timeline-breathe 2.6s ease-in-out infinite;
+}
+
+/* Opacity rather than scale, so the button never becomes a moving target. */
+@keyframes timeline-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
 .timeline-scrubber__play-icon {
   display: grid;
   place-items: center;
