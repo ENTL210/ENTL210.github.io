@@ -7,7 +7,7 @@ export const stops = [
     title: "The First Loaves",
     lon: 36,
     lat: 31,
-    image: "/images/hum100/fertile-crescent.jpg",
+    image: "/images/hum100/wild-emmer-wheat-field.jpg",
     imageAlt: "Photograph representing early grain grinding in the Fertile Crescent",
     content: {
       intro:
@@ -27,7 +27,7 @@ export const stops = [
     title: "Bread Learns to Rise",
     lon: 31,
     lat: 30,
-    image: "/images/hum100/ancient-egypt.jpg",
+    image: "/images/hum100/meketre-model.jpg",
     imageAlt: "Photograph representing ancient Egyptian bread baking in a clay oven",
     content: {
       intro:
@@ -48,7 +48,7 @@ export const stops = [
     lon: 2.35,
     lat: 48.85,
     zoom: 3.6,
-    image: "/images/hum100/paris-baguette.jpg",
+    image: "/images/hum100/boulangerie-paris1920.jpg",
     imageAlt: "Photograph representing a Parisian bakery with fresh baguettes",
     content: {
       intro:
@@ -70,7 +70,7 @@ export const stops = [
     lon: 106.6,
     lat: 10.85,
     zoom: 3.6,
-    image: "/images/hum100/saigon-import.jpg",
+    image: "/images/hum100/saigon-rue-catinat.jpg",
     imageAlt: "Photograph representing colonial-era Saigon with imported French goods",
     content: {
       intro:
@@ -92,7 +92,7 @@ export const stops = [
     lon: 106.7,
     lat: 10.75,
     zoom: 3.6,
-    image: "/images/hum100/banh-mi-birth.jpg",
+    image: "/images/hum100/banh-mi-hoa-ma.jpg",
     imageAlt: "Photograph representing a Saigon street vendor assembling a banh mi sandwich",
     content: {
       intro:
